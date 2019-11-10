@@ -22,7 +22,7 @@
   <?php 
 
       //dump(Cookie::get('p'));
-      dump($ranking);
+      //dump($ranking);
   ?>
   </pre>
   

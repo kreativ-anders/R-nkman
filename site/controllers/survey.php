@@ -4,6 +4,7 @@ return function ($kirby) {
 
   $ranking = null;
   $session = $kirby->session();
+  $arr = array();
 
   if ($kirby->request()->is('POST') && get('ranking') && get('description') && get('nickname')) {
     $ranking = get('ranking');
@@ -91,7 +92,7 @@ return function ($kirby) {
   }
   else {
 
-    $mysqli = new mysqli("localhost", "rankman_db", "123456", "rankman");
+    $mysqli = new mysqli("localhost", "u204246837_rankman_user", "123456", "u204246837_rankman_db");
 
     $session = $kirby->session();
     $u = Db::min('user', 'ID', 'Identifier="'. Cookie::get('u') . '"');
@@ -99,31 +100,65 @@ return function ($kirby) {
     $session->set('u', $u); 
     $session->set('v', $v); 
 
-    $stmt = $mysqli->prepare("SELECT POSITION.ID, POSITION.Description FROM POSITION WHERE position.User = ? AND position.Owner IN (SELECT voter.ID FROM voter WHERE voter.Identifier != ?)");
+    //$stmt = $mysqli->prepare("SELECT POSITION.ID, POSITION.Description FROM POSITION WHERE position.User = ? AND position.Owner IN (SELECT voter.ID FROM voter WHERE voter.Identifier != ?)");
     
+    /*$u = $session->get('u');  
+    $v = Cookie::get('v', null); 
+    $stmt->bind_param("ss", $u, $v);*/
+
+    //$stmt->execute();
+
+    /* bind result variables */
+    //$stmt->bind_result($IDs, $Descriptions);
+
+    /*$arr = array();
+    while ($stmt->fetch()) {
+      $obj = array( 'ID' => $IDs,'Description' => $Descriptions);
+      array_push($arr, $obj);
+    }*/
+
+    /*$arr = json_encode($arr);
+    Cookie::set('p', $arr);
+    $ranking = json_decode($arr);*/
+
+    //$stmt->close();
+    
+  
+  // --------------------
+mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_INDEX);
+$stmt =  $mysqli->stmt_init();
+  if ($stmt->prepare("SELECT position.ID, position.Description FROM position WHERE position.User = ? AND position.Owner IN (SELECT voter.ID FROM voter WHERE voter.Identifier != ?)")) {
+
+    /* bind parameters for markers */
     $u = $session->get('u');  
     $v = Cookie::get('v', null); 
     $stmt->bind_param("ss", $u, $v);
 
+    /* execute query */
     $stmt->execute();
 
     /* bind result variables */
     $stmt->bind_result($IDs, $Descriptions);
 
-    $arr = array();
-    while ($stmt->fetch()) {
-      $obj = array( 'ID' => $IDs,'Description' => $Descriptions);
-      array_push($arr, $obj);
-    }
+    /* fetch value */
+    $stmt->fetch();
 
+    while ($stmt->fetch()) {
+      $obj = array('ID' => $IDs, 'Description' => $Descriptions);
+      array_push($arr, (array) $obj);
+    }
+  
+  
     $arr = json_encode($arr);
     Cookie::set('p', $arr);
     $ranking = json_decode($arr);
 
+    /* close statement */
     $stmt->close();
-    $mysqli->close();
+}
+//--------------------------------
+$mysqli->close();
   }
-
   // pass $articles and $pagination to the template
   return [
     'ranking' => $ranking
