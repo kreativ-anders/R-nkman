@@ -1,0 +1,13 @@
+Title: Settings
+
+----
+
+Text: Use this option when the survey is mean to answered by certain parties. With this option you can relate Ranking options to the respective voters, so this voter cannot rank its own options. Please, provide at least one voter for Rænkman! 
+<br>
+DO NOT VOTE AS A CREATOR!
+Cookies are used to identify voter groups. 
+Once, you click a sepcific link, a cookie will be created and will impact the <u>creators</u> user experience.
+
+----
+
+Options: Here you can maintain all the options you want to show in your ranking, with at least one respectiove voter. ;)

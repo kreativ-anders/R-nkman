@@ -1,0 +1,8 @@
+Title: Dashboard
+
+----
+
+Text: One survey per Account. In case you need another survey, create another account! A Reset of a survey is not possible yet. 😒
+
+----
+
