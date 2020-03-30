@@ -1,14 +1,3 @@
-<?php
-/**
- * Templates render the content of your pages. 
- * They contain the markup together with some control structures like loops or if-statements.
- * The `$page` variable always refers to the currently active page. 
- * To fetch the content from each field we call the field name as a method on the `$page` object, e.g. `$page->title()`. * 
- * This default template must not be removed. It is used whenever Kirby cannot find a template with the name of the content file.
- * Snippets like the header, footer and intro contain markup used in multiple templates. They also help to keep templates clean.
- * More about templates: https://getkirby.com/docs/guide/templates/basics
- */
-?>
 <?php snippet('header') ?>
 
 <main>
@@ -17,49 +6,46 @@
   <div class="text" style="color: red">
     <?= $page->text()->kt() ?>
   </div>
-
-    <pre>
-  <?php 
-
-      //dump(Cookie::get('p'));
-      //dump($ranking);
-  ?>
-  </pre>
   
-  <a href="dashboard/settings">See survey setting</a>
+  <a href="dashboard/settings" style="text-decoration: underline; color: blue;">Survey Settings</a>
 
   <br><br>
 
+  <h3>Participants:</h3>
+  <ul style>
   <?php  
-    $u = Db::min('user', 'ID', 'Identifier="'. Cookie::get('u') . '"');
+    $u = Db::min('user', 'ID', 'Identifier="'. $kirby->user() . '"');
 
     $users = Db::select('voter', '*', ['User' => $u]);
 
     foreach ($users as $user) {
-      echo $user->Description();
+      echo "<li style=\"display: inline-block; padding-right: 2rem;\">" . $user->Description() . "</li>";
     }
 
     echo get('vid');
-
   ?>
-
-  <br><br>
-
-  <ul>
-  <?php foreach ($ranking as $position): ?>
-    <li class="rankman-option">
-    <?php echo $position->Description ?>
-    (<?php echo $position->Score ?>)
-    </li>
-  <?php endforeach ?>
   </ul>
-
+ 
   <br><br>
 
+  <table>
+    <tr>
+      <th style="padding-right: 2rem;">Rank</th>
+      <th style="padding-right: 2rem;">Description</th>
+      <th style="padding-right: 2rem;">Score</th>
+    </tr>
 
+    <?php foreach ($ranking as $i=>$position): ?>
+    <tr>
+      <td><?php echo $i+1 ?></td>
+      <td><?php echo $position->Description ?></td>
+      <td><?php echo $position->Score ?></td>
+    </tr>
+  <?php endforeach ?>
 
+  </table>
   
-
+  <br><br>
 
 </main>
 

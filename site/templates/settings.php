@@ -1,66 +1,45 @@
-<?php
-/**
- * Templates render the content of your pages. 
- * They contain the markup together with some control structures like loops or if-statements.
- * The `$page` variable always refers to the currently active page. 
- * To fetch the content from each field we call the field name as a method on the `$page` object, e.g. `$page->title()`. * 
- * This default template must not be removed. It is used whenever Kirby cannot find a template with the name of the content file.
- * Snippets like the header, footer and intro contain markup used in multiple templates. They also help to keep templates clean.
- * More about templates: https://getkirby.com/docs/guide/templates/basics
- */
-?>
 <?php snippet('header') ?>
 
 <main>
   <?php snippet('intro') ?>
-
-  <div class="text" style="color: red">
-    <?= $page->text()->kt() ?>
-  </div>
-
-    <pre>
-  <?php 
-
-      //dump(Cookie::get('p'));
-      //dump(count($ranking));
-  ?>
-  </pre>
-  
+ 
   <h2>Voters:</h2>
-  <?= $page->voters()->kt() ?>
+  <?= $page->text()->kt() ?>
 
   <br><br>
-
-  <?php  
-    /*$u = Db::min('user', 'ID', 'Identifier="'. Cookie::get('u') . '"');
-
-    $users = Db::select('voter', '*', ['User' => $u]);
-
-    foreach ($users as $user) {
-      echo $user->Description();
-    }
-
-    echo get('vid');*/
-
-  ?>
-
   
   <?php foreach ($voters as $voter): ?>
   
     <li class="voter-option" style="margin: 5px 0px 5px 0px">
       <form action="" method="post">
         <input style="font-size: 1.4em;font-weight: normal;color: #454545;" class="voter" value="<?php echo $voter->Description ?>" readonly/>
+        <input class="voter" type="hidden" name="vid" value="<?php echo md5($voter->Description) ?>" />
         <input class="submit" type="submit" value="Delete" />
 
         <?php 
-          $link = '/rankman/survey/' . $kirby->user()->id() . '/' . $voter->Identifier;
+          $link = '/survey/' . $kirby->user()->id() . '/' . $voter->Identifier;
         ?>
-      
-        <a href="<?php echo $link ?>"><?php echo $voter->Description ?> specific survey link</a>
+       
+        <input type="text" style="width: 0px; border: none" value="<?php echo url($link) ?>" id="<?php echo $voter->Description ?>" />
+        <span style="cursor: pointer" onclick="copyLink('<?php echo $voter->Description ?>')">Copy specific survey link for <?php echo $voter->Description ?></span>
       </form>
     </li> 
  
   <?php endforeach ?>
+
+  <script>
+  function copyLink(voter) {
+    /* Get the text field */
+    var copyText = document.getElementById(voter);
+
+    /* Select the text field */
+    copyText.select(); 
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  }
+  </script>
 
   <form action="" method="post">
     <input style="font-size: 1.4em;font-weight: normal;color: #454545;" class="voter" name="voter" value="" />
@@ -85,6 +64,7 @@
         ?>
 
         <input class="voter" value="<?php echo $owner ?>" readonly/>
+        <input type="hidden" name="oid" value="<?php echo $option->Description ?>" />
         <input class="submit" type="submit" value="Delete" />
       
       </form>
@@ -101,7 +81,7 @@
 
     <?php endforeach ?>
     </select>
-    <input class="submit" type="submit" value="Add Voter" /> 
+    <input class="submit" type="submit" value="Add Option" /> 
   </form>
 
   <br><br>
