@@ -92,7 +92,10 @@ return function ($kirby) {
   }
   else {
 
-    $mysqli = new mysqli("localhost", "u204246837_rankman_user", "123456", "u204246837_rankman_db");
+    $mysqli = new mysqli( option('db')["host"]
+                         ,option('db')["user"]
+                         ,option('db')["password"]
+                         ,option('db')["database"]);
 
     $session = $kirby->session();
     $u = Db::min('user', 'ID', 'Identifier="'. Cookie::get('u') . '"');
@@ -100,62 +103,19 @@ return function ($kirby) {
     $session->set('u', $u); 
     $session->set('v', $v); 
 
-    //$stmt = $mysqli->prepare("SELECT POSITION.ID, POSITION.Description FROM POSITION WHERE position.User = ? AND position.Owner IN (SELECT voter.ID FROM voter WHERE voter.Identifier != ?)");
-    
-    /*$u = $session->get('u');  
-    $v = Cookie::get('v', null); 
-    $stmt->bind_param("ss", $u, $v);*/
+    $options = Db::select('position', ['ID', 'Description'], 'User='. $u . ' and Owner !=' . $v);
 
-    //$stmt->execute();
-
-    /* bind result variables */
-    //$stmt->bind_result($IDs, $Descriptions);
-
-    /*$arr = array();
-    while ($stmt->fetch()) {
-      $obj = array( 'ID' => $IDs,'Description' => $Descriptions);
-      array_push($arr, $obj);
-    }*/
-
-    /*$arr = json_encode($arr);
-    Cookie::set('p', $arr);
-    $ranking = json_decode($arr);*/
-
-    //$stmt->close();
-    
-  
-  // --------------------
-mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_INDEX);
-$stmt =  $mysqli->stmt_init();
-  if ($stmt->prepare("SELECT position.ID, position.Description FROM position WHERE position.User = ? AND position.Owner IN (SELECT voter.ID FROM voter WHERE voter.Identifier != ?)")) {
-
-    /* bind parameters for markers */
-    $u = $session->get('u');  
-    $v = Cookie::get('v', null); 
-    $stmt->bind_param("ss", $u, $v);
-
-    /* execute query */
-    $stmt->execute();
-
-    /* bind result variables */
-    $stmt->bind_result($IDs, $Descriptions);
-
-    /* fetch value */
-    $stmt->fetch();
-
-    while ($stmt->fetch()) {
-      $obj = array('ID' => $IDs, 'Description' => $Descriptions);
-      array_push($arr, (array) $obj);
+    foreach ($options as $option) {
+      $obj = array('ID' => $option->ID(), 'Description' => $option->Description());
+      array_push($arr, (array) $obj); 
+      //printf("ID= %s |  Description = %s<br />\n", $option->ID(), $option->Description());
     }
-  
+
   
     $arr = json_encode($arr);
     Cookie::set('p', $arr);
     $ranking = json_decode($arr);
 
-    /* close statement */
-    $stmt->close();
-}
 //--------------------------------
 $mysqli->close();
   }
