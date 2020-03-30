@@ -57,16 +57,12 @@
         <?= $item->title()->link() ?>
       <?php endforeach ?>
       <?php if ($user = $kirby->user()): ?>
+        <a href="<?= url('dashboard') ?>">Dashboard</a>
         <a href="<?= url('logout') ?>">Logout</a>
       <?php else: ?>
+        <a href="register">Register</a>
         <a href="login">Login</a>
       <?php endif ?>
     </nav>
     </header>
-
-    <p>
-    <?php echo "Hello " . $user = $kirby->user()? $kirby->user()->email() . ": " . $kirby->user()->id(): ""; ?>
-    <br>
-    <a style="text-decoration: underline; color: blue" href="survey/Tfg86VER/0f1c6d45b761226679e0927cc47d24d3">EMEA-Test URL</a>
-    </p>
 
