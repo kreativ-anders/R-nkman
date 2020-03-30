@@ -1,4 +1,4 @@
-Title: Login
+Title: Register
 
 ----
 
@@ -14,4 +14,4 @@ Password: Password
 
 ----
 
-Button: Log in
+Button: Register
