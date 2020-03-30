@@ -14,12 +14,13 @@ return function ($kirby) {
 
     // fetch the user by username
     if ($user = $kirby->user(get('email'))) {
+      
       // if the user exists, try to log them in
       try {
         $user->login(get('password'));
         // redirect to the homepage
         // if the login was successful
-        go('/');
+        go('dashboard');
       } catch (Exception $e) {
         $error = true;
       }
