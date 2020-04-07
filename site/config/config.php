@@ -42,8 +42,8 @@ return [
     ],
     'db' => [
       'host'     => '127.0.0.1',
-      'database' => 'rankman',
-      'user'     => 'rankman_db',
+      'database' => 'u204246837_rankman_db',
+      'user'     => 'u204246837_rankman_user',
       'password' => '123456',
     ]
 ];
