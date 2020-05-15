@@ -1,10 +1,10 @@
-# Rankman 
+# Rænkman 
 
-Rankman is a super easy survey tool to create rankings only. A very handy feature is to split options to dedicated users so they cannot rank their own options. Feel free to check it out on [rankman.de](https://rankman.de/)
+Rænkman is a super easy survey tool to create rankings only. A very handy feature is to split options to dedicated users so they cannot rank their own options. Feel free to check it out on [rankman.de](https://rankman.de/)
 
 ## Usage
 
-Rankman is based on [Kirby](https://getkirby.com/), so check out this rep as well.
+Rænkman is based on [Kirby](https://getkirby.com/), so check out this rep as well.
 
 
 ## Contributing
